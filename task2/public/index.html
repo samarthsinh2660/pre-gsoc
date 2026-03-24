@@ -247,7 +247,7 @@
       <input
         id="repoInput"
         type="text"
-        placeholder="c2siorg/Webiu, nestjs/nest, webpack/webpack"
+        placeholder="c2siorg/Webiu, axios/axios, expressjs/express"
         autocomplete="off"
         spellcheck="false"
       />
@@ -255,8 +255,8 @@
     </div>
     <div class="examples">
       Try:
-      <span onclick="setExample('c2siorg/Webiu,nestjs/nest,expressjs/express')">WebiU + NestJS + Express</span> ·
-      <span onclick="setExample('axios/axios,webpack/webpack')">axios + webpack</span>
+      <span onclick="setExample('c2siorg/Webiu,axios/axios')">Webiu + axios</span> ·
+      <span onclick="setExample('expressjs/express,webpack/webpack')">Express + webpack</span>
     </div>
   </div>
 
@@ -302,7 +302,8 @@
     results.innerHTML = '';
 
     try {
-      const res = await fetch(`/api/analyze?repos=${encodeURIComponent(input)}`);
+      const repos = input.split(',').map(r => r.trim()).filter(Boolean).join(',');
+      const res = await fetch(`/api/analyze?repos=${repos}`);
       const data = await res.json();
 
       if (data.error) throw new Error(data.error);

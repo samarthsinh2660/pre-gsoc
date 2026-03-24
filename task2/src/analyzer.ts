@@ -178,7 +178,9 @@ async function main() {
   console.log('\n' + formatTextReport(report));
 }
 
-main().catch((err) => {
-  console.error('Unexpected error:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error('Unexpected error:', err);
+    process.exit(1);
+  });
+}
