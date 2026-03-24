@@ -1,0 +1,32 @@
+{
+  "name": "github-repo-analyzer",
+  "version": "1.0.0",
+  "description": "GitHub Repository Intelligence Analyzer — activity score, complexity, learning difficulty",
+  "main": "dist/analyzer.js",
+  "scripts": {
+    "start": "ts-node src/analyzer.ts",
+    "build": "tsc",
+    "dev": "vercel dev",
+    "deploy": "vercel deploy --prod",
+    "analyze": "ts-node src/analyzer.ts",
+    "test": "jest"
+  },
+  "bin": {
+    "repo-analyze": "./dist/analyzer.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vercel/node": "^3.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.3.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

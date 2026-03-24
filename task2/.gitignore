@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Compiled output
+dist/
+*.js
+*.js.map
+*.d.ts
+!vercel.json
+
+# Environment variables — never commit your token
+.env
+.env.local
+.env.*.local
+
+# Tool output
+output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel/

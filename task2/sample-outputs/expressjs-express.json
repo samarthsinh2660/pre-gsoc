@@ -1,0 +1,82 @@
+{
+  "repo": "expressjs/express",
+  "url": "https://github.com/expressjs/express",
+  "description": "Fast, unopinionated, minimalist web framework for Node.js",
+  "isArchived": false,
+  "isFork": false,
+  "raw": {
+    "name": "express",
+    "fullName": "expressjs/express",
+    "description": "Fast, unopinionated, minimalist web framework for node.",
+    "stars": 65100,
+    "forks": 15800,
+    "openIssues": 178,
+    "watchers": 65100,
+    "language": "JavaScript",
+    "sizeKB": 1240,
+    "createdAt": "2009-06-26T12:00:00Z",
+    "pushedAt": "2026-02-18T14:20:00Z",
+    "defaultBranch": "master",
+    "topics": ["nodejs", "javascript", "web", "framework", "http"],
+    "isArchived": false,
+    "isFork": false
+  },
+  "languages": {
+    "JavaScript": 214800
+  },
+  "contributors": {
+    "totalContributors": 100,
+    "topContributors": [
+      { "login": "dougwilson", "contributions": 1842 },
+      { "login": "jonathanong", "contributions": 312 },
+      { "login": "blakeembrey", "contributions": 198 },
+      { "login": "wesleytodd", "contributions": 176 },
+      { "login": "LinusU", "contributions": 121 }
+    ]
+  },
+  "activity": {
+    "commitsLast30d": 6,
+    "issuesClosedLast30d": 4,
+    "issuesOpenedLast30d": 9,
+    "daysSinceLastPush": 35,
+    "uniqueContributorsLast30d": 3
+  },
+  "dependencies": {
+    "hasPackageJson": true,
+    "hasRequirementsTxt": false,
+    "hasPomXml": false,
+    "hasGemfile": false,
+    "hasGoMod": false,
+    "hasCargo": false
+  },
+  "scores": {
+    "activityScore": 32,
+    "complexityScore": 40,
+    "difficulty": "Intermediate"
+  },
+  "techStack": ["JavaScript", "Node.js"],
+  "analysedAt": "2026-03-25T10:02:00Z",
+  "_scoreBreakdown": {
+    "activity": {
+      "commitScore":     "min(30, 6 × 0.5)                 = 3.0",
+      "issueScore":      "min(15, 4 × 0.75)                = 3.0",
+      "contribScore":    "min(20, 3 × 2)                   = 6.0",
+      "freshnessScore":  "max(0,  15 − 35 × 0.5)           = 0.0  (not pushed in 30d)",
+      "popularityScore": "min(20, log10(65101)×5 + 158)    = 20.0 (capped)",
+      "total": 32.0,
+      "rounded": 32,
+      "note": "Express is in maintenance mode — low commit frequency is intentional and accurately reflected"
+    },
+    "complexity": {
+      "sizeScore":    "min(30, 1240/500)   = 2.5",
+      "langScore":    "min(20, 1 × 4)      = 4.0",
+      "depScore":     "package.json → 2.0",
+      "issueBacklog": "min(15, 178/20)     = 8.9",
+      "contribScale": "min(15, 100/5)      = 15.0 (capped)",
+      "ageScore":     "min(8,  17 × 1.5)   = 8.0  (capped)",
+      "total": 40.4,
+      "rounded": 40
+    },
+    "classification": "32 < 75 AND 40 < 60 → not Advanced; 40 >= 28 → not Beginner → Intermediate"
+  }
+}

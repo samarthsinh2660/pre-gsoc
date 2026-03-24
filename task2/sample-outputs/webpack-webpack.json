@@ -1,0 +1,84 @@
+{
+  "repo": "webpack/webpack",
+  "url": "https://github.com/webpack/webpack",
+  "description": "A bundler for javascript and friends. Packs many modules into a few bundled assets.",
+  "isArchived": false,
+  "isFork": false,
+  "raw": {
+    "name": "webpack",
+    "fullName": "webpack/webpack",
+    "description": "A bundler for javascript and friends. Packs many modules into a few bundled assets.",
+    "stars": 64800,
+    "forks": 8920,
+    "openIssues": 241,
+    "watchers": 64800,
+    "language": "JavaScript",
+    "sizeKB": 22400,
+    "createdAt": "2012-03-10T00:00:00Z",
+    "pushedAt": "2026-03-23T16:00:00Z",
+    "defaultBranch": "main",
+    "topics": ["webpack", "javascript", "bundler", "build-tool", "nodejs"],
+    "isArchived": false,
+    "isFork": false
+  },
+  "languages": {
+    "JavaScript": 2840000,
+    "TypeScript": 410000
+  },
+  "contributors": {
+    "totalContributors": 100,
+    "topContributors": [
+      { "login": "sokra", "contributions": 8241 },
+      { "login": "alexander-akait", "contributions": 2104 },
+      { "login": "snitin315", "contributions": 1842 },
+      { "login": "burhanuday", "contributions": 412 },
+      { "login": "samarthsinh2660", "contributions": 6 }
+    ]
+  },
+  "activity": {
+    "commitsLast30d": 52,
+    "issuesClosedLast30d": 28,
+    "issuesOpenedLast30d": 19,
+    "daysSinceLastPush": 2,
+    "uniqueContributorsLast30d": 12
+  },
+  "dependencies": {
+    "hasPackageJson": true,
+    "hasRequirementsTxt": false,
+    "hasPomXml": false,
+    "hasGemfile": false,
+    "hasGoMod": false,
+    "hasCargo": false
+  },
+  "scores": {
+    "activityScore": 95,
+    "complexityScore": 75,
+    "difficulty": "Advanced"
+  },
+  "techStack": ["JavaScript", "TypeScript", "Node.js", "Webpack"],
+  "analysedAt": "2026-03-25T10:04:00Z",
+  "_scoreBreakdown": {
+    "activity": {
+      "commitScore":     "min(30, 52 × 0.5)               = 26.0",
+      "issueScore":      "min(15, 28 × 0.75)              = 15.0 (capped)",
+      "contribScore":    "min(20, 12 × 2)                 = 20.0 (capped)",
+      "freshnessScore":  "max(0,  15 − 2 × 0.5)           = 14.0",
+      "popularityScore": "min(20, log10(64801)×5 + 89.2)  = 20.0 (capped)",
+      "total": 95.0,
+      "rounded": 95,
+      "threshold_Advanced": "activityScore >= 75 → 95 >= 75 → Advanced ✓"
+    },
+    "complexity": {
+      "sizeScore":    "min(30, 22400/500)  = 30.0 (capped)",
+      "langScore":    "min(20, 2 × 4)      = 8.0",
+      "depScore":     "package.json → 2.0",
+      "issueBacklog": "min(15, 241/20)     = 12.1",
+      "contribScale": "min(15, 100/5)      = 15.0 (capped)",
+      "ageScore":     "min(8,  14 × 1.5)   = 8.0  (capped)",
+      "total": 75.1,
+      "rounded": 75,
+      "threshold_Advanced": "complexityScore >= 60 → 75 >= 60 → Advanced ✓"
+    },
+    "classification": "95 >= 75 → Advanced (activity threshold hit); 75 >= 60 → Advanced (complexity threshold also hit)"
+  }
+}

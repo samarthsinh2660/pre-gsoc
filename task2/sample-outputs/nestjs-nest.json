@@ -1,0 +1,85 @@
+{
+  "repo": "nestjs/nest",
+  "url": "https://github.com/nestjs/nest",
+  "description": "A progressive Node.js framework for building efficient, scalable, and enterprise-grade server-side applications.",
+  "isArchived": false,
+  "isFork": false,
+  "raw": {
+    "name": "nest",
+    "fullName": "nestjs/nest",
+    "description": "A progressive Node.js framework for building efficient, scalable server-side applications.",
+    "stars": 68200,
+    "forks": 7640,
+    "openIssues": 312,
+    "watchers": 68200,
+    "language": "TypeScript",
+    "sizeKB": 18740,
+    "createdAt": "2017-10-28T10:00:00Z",
+    "pushedAt": "2026-03-24T18:00:00Z",
+    "defaultBranch": "master",
+    "topics": ["nestjs", "nodejs", "typescript", "framework", "rest", "graphql"],
+    "isArchived": false,
+    "isFork": false
+  },
+  "languages": {
+    "TypeScript": 1820400,
+    "JavaScript": 22300,
+    "Shell": 4100
+  },
+  "contributors": {
+    "totalContributors": 100,
+    "topContributors": [
+      { "login": "kamilmysliwiec", "contributions": 4210 },
+      { "login": "micalevisk", "contributions": 382 },
+      { "login": "jmcdo29", "contributions": 291 },
+      { "login": "Micael-Levi", "contributions": 204 },
+      { "login": "nestjsplus", "contributions": 188 }
+    ]
+  },
+  "activity": {
+    "commitsLast30d": 98,
+    "issuesClosedLast30d": 44,
+    "issuesOpenedLast30d": 51,
+    "daysSinceLastPush": 1,
+    "uniqueContributorsLast30d": 18
+  },
+  "dependencies": {
+    "hasPackageJson": true,
+    "hasRequirementsTxt": false,
+    "hasPomXml": false,
+    "hasGemfile": false,
+    "hasGoMod": false,
+    "hasCargo": false
+  },
+  "scores": {
+    "activityScore": 100,
+    "complexityScore": 82,
+    "difficulty": "Advanced"
+  },
+  "techStack": ["TypeScript", "JavaScript", "Node.js", "NestJS", "GraphQL"],
+  "analysedAt": "2026-03-25T10:01:00Z",
+  "_scoreBreakdown": {
+    "activity": {
+      "commitScore":     "min(30, 98 × 0.5)               = 30.0  (capped)",
+      "issueScore":      "min(15, 44 × 0.75)              = 15.0  (capped)",
+      "contribScore":    "min(20, 18 × 2)                 = 20.0  (capped)",
+      "freshnessScore":  "max(0,  15 − 1 × 0.5)           = 14.5",
+      "popularityScore": "min(20, log10(68201)×5 + 76.4)  = 20.0  (capped)",
+      "total": 99.5,
+      "rounded": 100,
+      "threshold_Advanced": "activityScore >= 75 → 100 >= 75 → Advanced ✓"
+    },
+    "complexity": {
+      "sizeScore":    "min(30, 18740/500)  = 30.0  (capped)",
+      "langScore":    "min(20, 3 × 4)      = 12.0",
+      "depScore":     "package.json → 2.0",
+      "issueBacklog": "min(15, 312/20)     = 15.0  (capped)",
+      "contribScale": "min(15, 100/5)      = 15.0  (capped)",
+      "ageScore":     "min(8,  9 × 1.5)    = 8.0   (capped)",
+      "total": 82.0,
+      "rounded": 82,
+      "threshold_Advanced": "complexityScore >= 60 → 82 >= 60 → Advanced ✓"
+    },
+    "classification": "100 >= 75 → Advanced (activity threshold hit)"
+  }
+}
