@@ -133,11 +133,13 @@ export class GitHubClient {
       // empty repo or no commits — handled gracefully
     }
 
-    // Issues closed and opened in last 30 days via Search API (1 call each)
+    // Issues closed/opened in last 30 days + total open issues/PRs via Search API
     let issuesClosedLast30d = 0;
     let issuesOpenedLast30d = 0;
+    let openIssues = 0;
+    let openPRs = 0;
     try {
-      const [closedRes, openedRes] = await Promise.all([
+      const [closedRes, openedRes, openIssuesRes, openPRsRes] = await Promise.all([
         this.client.get('/search/issues', {
           params: {
             q: `repo:${owner}/${repo} type:issue state:closed closed:>${since.slice(0, 10)}`,
@@ -150,9 +152,23 @@ export class GitHubClient {
             per_page: 1,
           },
         }),
+        this.client.get('/search/issues', {
+          params: {
+            q: `repo:${owner}/${repo} type:issue state:open`,
+            per_page: 1,
+          },
+        }),
+        this.client.get('/search/issues', {
+          params: {
+            q: `repo:${owner}/${repo} type:pr state:open`,
+            per_page: 1,
+          },
+        }),
       ]);
       issuesClosedLast30d = closedRes.data.total_count ?? 0;
       issuesOpenedLast30d = openedRes.data.total_count ?? 0;
+      openIssues = openIssuesRes.data.total_count ?? 0;
+      openPRs = openPRsRes.data.total_count ?? 0;
     } catch {
       // search API unavailable — leave at 0
     }
@@ -163,6 +179,8 @@ export class GitHubClient {
       issuesOpenedLast30d,
       daysSinceLastPush,
       uniqueContributorsLast30d,
+      openIssues,
+      openPRs,
     };
   }
 

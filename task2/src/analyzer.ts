@@ -85,6 +85,8 @@ export async function analyseRepo(
         issuesOpenedLast30d: 0,
         daysSinceLastPush: 0,
         uniqueContributorsLast30d: 0,
+        openIssues: 0,
+        openPRs: 0,
       },
       dependencies: {
         hasPackageJson: false,

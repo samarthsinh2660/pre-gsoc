@@ -37,6 +37,10 @@ export interface ActivityData {
   issuesOpenedLast30d: number;
   daysSinceLastPush: number;
   uniqueContributorsLast30d: number;
+  /** Total open issues excluding pull requests (via Search API) */
+  openIssues: number;
+  /** Total open pull requests */
+  openPRs: number;
 }
 
 export interface DependencyFiles {

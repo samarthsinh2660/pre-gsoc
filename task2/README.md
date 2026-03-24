@@ -217,17 +217,15 @@ Intermediate  → everything else
 
 ---
 
-## Sample Results (5 Repositories)
+## Live Results
 
-| Repository | Activity | Complexity | Difficulty | Notes |
-|---|---|---|---|---|
-| c2siorg/Webiu | 71 | 43 | **Intermediate** | Active GSoC org project, medium codebase |
-| nestjs/nest | 100 | 82 | **Advanced** | Both thresholds hit — massive active framework |
-| expressjs/express | 32 | 40 | **Intermediate** | Maintenance mode; low activity is accurate |
-| axios/axios | 67 | 55 | **Intermediate** | Large issue backlog drives complexity score |
-| webpack/webpack | 95 | 75 | **Advanced** | Both thresholds hit — 14-year-old bundler |
+All scores come from the real GitHub API — no cached or fake data. Try it:
 
-Full JSON reports with score breakdowns are in `sample-outputs/`. Each file includes a `_scoreBreakdown` field showing exactly how every component was calculated.
+```bash
+curl "https://pre-gsoc.vercel.app/api/analyze?repos=c2siorg/Webiu,nestjs/nest,expressjs/express,axios/axios,webpack/webpack"
+```
+
+Or open the web UI at **https://pre-gsoc.vercel.app** and enter any repo.
 
 ---
 
@@ -247,7 +245,7 @@ Full JSON reports with score breakdowns are in `sample-outputs/`. Each file incl
 
 ## Rate Limit Efficiency
 
-**API calls per repo (approximate): 6–8 total**
+**API calls per repo (approximate): 10–12 total**
 
 | Call | Purpose | Efficient because |
 |---|---|---|
@@ -255,8 +253,10 @@ Full JSON reports with score breakdowns are in `sample-outputs/`. Each file incl
 | `GET /repos/{owner}/{repo}/languages` | Language breakdown | 1 call |
 | `GET /repos/{owner}/{repo}/contributors` | Top contributors | 1 call, 100 per page |
 | `GET /repos/{owner}/{repo}/commits?since=` | Recent commits count | 1 call, capped at 100 |
-| `GET /search/issues?q=...closed:>DATE` | Closed issue count | Uses `total_count` — no pagination needed |
-| `GET /search/issues?q=...opened:>DATE` | Open issue count | Uses `total_count` — no pagination needed |
+| `GET /search/issues?q=...type:issue state:closed` | Closed issue count | Uses `total_count` — no pagination |
+| `GET /search/issues?q=...type:issue state:open created:>DATE` | Recently opened issues | Uses `total_count` |
+| `GET /search/issues?q=...type:issue state:open` | Total open issues (no PRs) | Correct count — GitHub REST mixes PRs in |
+| `GET /search/issues?q=...type:pr state:open` | Total open PRs | Separate from issues |
 | `GET /repos/{owner}/{repo}/contents/{file}` × 6 | Dep file detection | All 6 run in `Promise.all` |
 
 All per-repo fetches (languages, contributors, activity, deps) run in `Promise.all` — not sequentially. A 500ms pause between repos prevents burst rate-limit hits.
@@ -275,7 +275,8 @@ All per-repo fetches (languages, contributors, activity, deps) run in `Promise.a
 │   └── analyzer.ts     CLI entry point + repo orchestrator
 ├── api/
 │   └── analyze.ts      Vercel serverless function (HTTP API)
-├── sample-outputs/     Pre-generated reports for 5 repositories (with score breakdowns)
+├── public/
+│   └── index.html      Web UI (dark GitHub-themed, fetches live API)
 ├── .env.example        Token configuration template
 ├── .gitignore
 ├── package.json
@@ -294,12 +295,17 @@ npm install -g vercel
 # Login
 vercel login
 
-# Add your GitHub token as a secret
-vercel secret add github_token ghp_your_token_here
-
 # Deploy
 vercel deploy --prod
 ```
+
+Then in the Vercel dashboard → Project → Settings → Environment Variables, add:
+
+```
+GITHUB_TOKEN = ghp_your_token_here
+```
+
+Without a token, the API still works but is limited to 60 GitHub API requests/hour.
 
 Vercel will print the deployment URL. The function is available at `<your-url>/api/analyze`.
 

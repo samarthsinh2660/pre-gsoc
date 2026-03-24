@@ -381,7 +381,8 @@
           <div class="stats-row">
             <span>⭐ <b>${fmt(r.raw.stars)}</b> stars</span>
             <span>🍴 <b>${fmt(r.raw.forks)}</b> forks</span>
-            <span>🐛 <b>${r.raw.openIssues}</b> open issues</span>
+            <span>🐛 <b>${r.activity.openIssues}</b> issues</span>
+            <span>🔀 <b>${r.activity.openPRs}</b> open PRs</span>
             <span>👥 <b>${r.contributors.totalContributors}+</b> contributors</span>
             <span>📦 <b>${fmtKB(r.raw.sizeKB)}</b></span>
             <span>🕐 pushed <b>${r.activity.daysSinceLastPush}d ago</b></span>

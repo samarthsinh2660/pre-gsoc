@@ -72,6 +72,7 @@ export function calculateComplexityScore(
   languages: LanguageBreakdown,
   contributors: ContributorSummary,
   deps: DependencyFiles,
+  openIssues?: number,
 ): number {
   const languageCount = Object.keys(languages).length;
 
@@ -87,7 +88,8 @@ export function calculateComplexityScore(
     (deps.hasGoMod ? 2 : 0) +
     (deps.hasCargo ? 2 : 0);
 
-  const issueBacklog = Math.min(15, raw.openIssues / 20);
+  // Use Search API corrected count (excludes PRs) when available; fall back to raw
+  const issueBacklog = Math.min(15, (openIssues ?? raw.openIssues) / 20);
 
   const contribScale = Math.min(15, contributors.totalContributors / 5);
 
@@ -185,7 +187,7 @@ export function calculateScores(
   deps: DependencyFiles,
 ): Scores {
   const activityScore = calculateActivityScore(raw, activity);
-  const complexityScore = calculateComplexityScore(raw, languages, contributors, deps);
+  const complexityScore = calculateComplexityScore(raw, languages, contributors, deps, activity.openIssues || undefined);
   const difficulty = classifyDifficulty(activityScore, complexityScore);
   return { activityScore, complexityScore, difficulty };
 }
