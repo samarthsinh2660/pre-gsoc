@@ -304,8 +304,19 @@
     try {
       const repos = input.split(',').map(r => r.trim()).filter(Boolean).join(',');
       const res = await fetch(`/api/analyze?repos=${repos}`);
-      const data = await res.json();
 
+      if (!res.ok) {
+        const ct = res.headers.get('content-type') || '';
+        if (ct.includes('application/json')) {
+          const e = await res.json();
+          throw new Error(e.error || e.message || `HTTP ${res.status}`);
+        }
+        if (res.status === 404) throw new Error('API not found — function may not be deployed yet.');
+        if (res.status === 403) throw new Error('GitHub rate limit exceeded. Add a GITHUB_TOKEN env var in Vercel settings.');
+        throw new Error(`API error ${res.status}`);
+      }
+
+      const data = await res.json();
       if (data.error) throw new Error(data.error);
 
       renderSummary(data);
