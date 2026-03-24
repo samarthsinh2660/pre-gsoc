@@ -391,8 +391,20 @@
 
       const topContribs = (r.contributors?.topContributors || [])
         .slice(0, 3)
-        .map(c => `<b>${c.login}</b>`)
-        .join(', ');
+        .map(c => `<b>${c.login}</b> <span style="color:var(--muted);font-size:0.7rem">(${c.contributions})</span>`)
+        .join(' · ');
+
+      const ch = r.communityHealth || {};
+      const healthPills = [
+        ch.hasContributing  ? `<span class="pill health-ok">✓ CONTRIBUTING</span>` : `<span class="pill health-no">✗ CONTRIBUTING</span>`,
+        ch.hasCodeOfConduct ? `<span class="pill health-ok">✓ Code of Conduct</span>` : `<span class="pill health-no">✗ Code of Conduct</span>`,
+        ch.hasIssueTemplate ? `<span class="pill health-ok">✓ Issue Template</span>` : `<span class="pill health-no">✗ Issue Template</span>`,
+      ].join('');
+
+      const gfi = r.activity.goodFirstIssues ?? 0;
+      const mergeRate = r.scores.prMergeRate ?? 0;
+      const busFactor = r.scores.busFactorPct ?? 0;
+      const busColor = busFactor >= 70 ? 'var(--red)' : busFactor >= 40 ? 'var(--yellow)' : 'var(--green)';
 
       container.innerHTML += `
         <div class="card">
@@ -425,13 +437,35 @@
               <div class="bar-track"><div class="bar-fill complexity" style="width:${r.scores.complexityScore}%"></div></div>
               <span class="score-val">${r.scores.complexityScore}</span>
             </div>
+            <div class="score-row">
+              <span class="score-label" title="% of closed PRs (30d) that were merged — higher = more responsive maintainers">Merge rate</span>
+              <div class="bar-track"><div class="bar-fill merge-rate" style="width:${mergeRate}%"></div></div>
+              <span class="score-val">${mergeRate}%</span>
+            </div>
+            <div class="score-row">
+              <span class="score-label" title="% of commits from top contributor — lower = healthier team distribution">Bus factor</span>
+              <div class="bar-track"><div class="bar-fill bus-factor" style="width:${busFactor}%"></div></div>
+              <span class="score-val" style="color:${busColor}">${busFactor}%</span>
+            </div>
           </div>
 
           <div class="stats-row" style="margin-top:0.85rem; margin-bottom:0">
             <span>Commits/30d: <b>${r.activity.commitsLast30d}</b></span>
             <span>Issues closed/30d: <b>${r.activity.issuesClosedLast30d}</b></span>
+            <span>PRs merged/30d: <b>${r.activity.mergedPRsLast30d}</b></span>
             <span>Unique contribs/30d: <b>${r.activity.uniqueContributorsLast30d}</b></span>
-            ${topContribs ? `<span>Top: ${topContribs}</span>` : ''}
+          </div>
+
+          ${topContribs ? `<div class="stats-row" style="margin-top:0.3rem;margin-bottom:0"><span>Top contributors: ${topContribs}</span></div>` : ''}
+
+          <hr class="divider">
+
+          <div class="readiness">
+            ${gfi > 0
+              ? `<a href="https://github.com/${r.repo}/issues?q=is:open+label:%22good+first+issue%22" target="_blank" class="pill gfi">🟢 ${gfi} good first issue${gfi > 1 ? 's' : ''}</a>`
+              : `<span class="pill health-no">No good first issues</span>`
+            }
+            ${healthPills}
           </div>
 
           ${chips ? `<div class="chips">${chips}</div>` : ''}
