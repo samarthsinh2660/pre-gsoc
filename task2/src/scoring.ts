@@ -189,5 +189,18 @@ export function calculateScores(
   const activityScore = calculateActivityScore(raw, activity);
   const complexityScore = calculateComplexityScore(raw, languages, contributors, deps, activity.openIssues || undefined);
   const difficulty = classifyDifficulty(activityScore, complexityScore);
-  return { activityScore, complexityScore, difficulty };
+
+  // Bus factor: % of total commits from the single top contributor (lower = healthier)
+  const busFactorPct =
+    contributors.totalContributions > 0 && contributors.topContributors.length > 0
+      ? Math.round((contributors.topContributors[0].contributions / contributors.totalContributions) * 100)
+      : 0;
+
+  // PR merge rate: % of closed PRs (30d) that were actually merged (not just rejected)
+  const prMergeRate =
+    activity.closedPRsLast30d > 0
+      ? Math.round((activity.mergedPRsLast30d / activity.closedPRsLast30d) * 100)
+      : 0;
+
+  return { activityScore, complexityScore, difficulty, busFactorPct, prMergeRate };
 }

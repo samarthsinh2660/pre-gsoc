@@ -5,6 +5,7 @@ import {
   ContributorSummary,
   ActivityData,
   DependencyFiles,
+  CommunityHealth,
 } from './types';
 
 const THIRTY_DAYS_AGO = (): string => {
@@ -85,18 +86,20 @@ export class GitHubClient {
       });
 
       if (!Array.isArray(data)) {
-        return { totalContributors: 0, topContributors: [] };
+        return { totalContributors: 0, totalContributions: 0, topContributors: [] };
       }
 
+      const totalContributions = data.reduce((sum: number, c: any) => sum + (c.contributions ?? 0), 0);
       return {
         totalContributors: data.length,
+        totalContributions,
         topContributors: data.slice(0, 5).map((c: any) => ({
           login: c.login,
           contributions: c.contributions,
         })),
       };
     } catch {
-      return { totalContributors: 0, topContributors: [] };
+      return { totalContributors: 0, totalContributions: 0, topContributors: [] };
     }
   }
 
@@ -133,42 +136,48 @@ export class GitHubClient {
       // empty repo or no commits — handled gracefully
     }
 
-    // Issues closed/opened in last 30 days + total open issues/PRs via Search API
+    // All search-based counts run in parallel (7 calls, all use total_count — no pagination)
     let issuesClosedLast30d = 0;
     let issuesOpenedLast30d = 0;
     let openIssues = 0;
     let openPRs = 0;
+    let goodFirstIssues = 0;
+    let mergedPRsLast30d = 0;
+    let closedPRsLast30d = 0;
     try {
-      const [closedRes, openedRes, openIssuesRes, openPRsRes] = await Promise.all([
+      const [
+        closedRes, openedRes, openIssuesRes, openPRsRes,
+        gfiRes, mergedRes, closedPRRes,
+      ] = await Promise.all([
         this.client.get('/search/issues', {
-          params: {
-            q: `repo:${owner}/${repo} type:issue state:closed closed:>${since.slice(0, 10)}`,
-            per_page: 1,
-          },
+          params: { q: `repo:${owner}/${repo} type:issue state:closed closed:>${since.slice(0, 10)}`, per_page: 1 },
         }),
         this.client.get('/search/issues', {
-          params: {
-            q: `repo:${owner}/${repo} type:issue state:open created:>${since.slice(0, 10)}`,
-            per_page: 1,
-          },
+          params: { q: `repo:${owner}/${repo} type:issue state:open created:>${since.slice(0, 10)}`, per_page: 1 },
         }),
         this.client.get('/search/issues', {
-          params: {
-            q: `repo:${owner}/${repo} type:issue state:open`,
-            per_page: 1,
-          },
+          params: { q: `repo:${owner}/${repo} type:issue state:open`, per_page: 1 },
         }),
         this.client.get('/search/issues', {
-          params: {
-            q: `repo:${owner}/${repo} type:pr state:open`,
-            per_page: 1,
-          },
+          params: { q: `repo:${owner}/${repo} type:pr state:open`, per_page: 1 },
+        }),
+        this.client.get('/search/issues', {
+          params: { q: `repo:${owner}/${repo} type:issue state:open label:"good first issue"`, per_page: 1 },
+        }),
+        this.client.get('/search/issues', {
+          params: { q: `repo:${owner}/${repo} type:pr is:merged merged:>${since.slice(0, 10)}`, per_page: 1 },
+        }),
+        this.client.get('/search/issues', {
+          params: { q: `repo:${owner}/${repo} type:pr state:closed closed:>${since.slice(0, 10)}`, per_page: 1 },
         }),
       ]);
       issuesClosedLast30d = closedRes.data.total_count ?? 0;
       issuesOpenedLast30d = openedRes.data.total_count ?? 0;
       openIssues = openIssuesRes.data.total_count ?? 0;
       openPRs = openPRsRes.data.total_count ?? 0;
+      goodFirstIssues = gfiRes.data.total_count ?? 0;
+      mergedPRsLast30d = mergedRes.data.total_count ?? 0;
+      closedPRsLast30d = closedPRRes.data.total_count ?? 0;
     } catch {
       // search API unavailable — leave at 0
     }
@@ -181,6 +190,9 @@ export class GitHubClient {
       uniqueContributorsLast30d,
       openIssues,
       openPRs,
+      goodFirstIssues,
+      mergedPRsLast30d,
+      closedPRsLast30d,
     };
   }
 
@@ -215,6 +227,18 @@ export class GitHubClient {
       hasGemfile: exists(3),
       hasGoMod: exists(4),
       hasCargo: exists(5),
+    };
+  }
+
+  async getCommunityHealth(owner: string, repo: string): Promise<CommunityHealth> {
+    const files = ['CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', '.github/ISSUE_TEMPLATE'];
+    const results = await Promise.allSettled(
+      files.map((f) => this.client.get(`/repos/${owner}/${repo}/contents/${f}`)),
+    );
+    return {
+      hasContributing: results[0].status === 'fulfilled',
+      hasCodeOfConduct: results[1].status === 'fulfilled',
+      hasIssueTemplate: results[2].status === 'fulfilled',
     };
   }
 }

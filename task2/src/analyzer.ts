@@ -37,11 +37,12 @@ export async function analyseRepo(
     const raw = await client.getRepo(input.owner, input.repo);
 
     // These depend on raw data (branch, pushedAt) so run after
-    const [languages, contributors, activity, deps] = await Promise.all([
+    const [languages, contributors, activity, deps, communityHealth] = await Promise.all([
       client.getLanguages(input.owner, input.repo),
       client.getContributors(input.owner, input.repo),
       client.getActivityData(input.owner, input.repo, raw.pushedAt),
       client.getDependencyFiles(input.owner, input.repo, raw.defaultBranch),
+      client.getCommunityHealth(input.owner, input.repo),
     ]);
 
     const scores = calculateScores(raw, languages, contributors, activity, deps);
@@ -58,6 +59,7 @@ export async function analyseRepo(
       contributors,
       activity,
       dependencies: deps,
+      communityHealth,
       scores,
       techStack,
       analysedAt: new Date().toISOString(),
@@ -78,7 +80,7 @@ export async function analyseRepo(
       isFork: false,
       raw: {} as any,
       languages: {},
-      contributors: { totalContributors: 0, topContributors: [] },
+      contributors: { totalContributors: 0, totalContributions: 0, topContributors: [] },
       activity: {
         commitsLast30d: 0,
         issuesClosedLast30d: 0,
@@ -87,7 +89,11 @@ export async function analyseRepo(
         uniqueContributorsLast30d: 0,
         openIssues: 0,
         openPRs: 0,
+        goodFirstIssues: 0,
+        mergedPRsLast30d: 0,
+        closedPRsLast30d: 0,
       },
+      communityHealth: { hasContributing: false, hasCodeOfConduct: false, hasIssueTemplate: false },
       dependencies: {
         hasPackageJson: false,
         hasRequirementsTxt: false,
@@ -96,7 +102,7 @@ export async function analyseRepo(
         hasGoMod: false,
         hasCargo: false,
       },
-      scores: { activityScore: 0, complexityScore: 0, difficulty: 'Beginner' },
+      scores: { activityScore: 0, complexityScore: 0, difficulty: 'Beginner', busFactorPct: 0, prMergeRate: 0 },
       techStack: [],
       analysedAt: new Date().toISOString(),
       error: message,

@@ -28,6 +28,7 @@ export interface LanguageBreakdown {
 
 export interface ContributorSummary {
   totalContributors: number;
+  totalContributions: number;
   topContributors: Array<{ login: string; contributions: number }>;
 }
 
@@ -41,6 +42,18 @@ export interface ActivityData {
   openIssues: number;
   /** Total open pull requests */
   openPRs: number;
+  /** Issues labelled "good first issue" that are open */
+  goodFirstIssues: number;
+  /** PRs merged in the last 30 days */
+  mergedPRsLast30d: number;
+  /** PRs closed (merged + rejected) in the last 30 days */
+  closedPRsLast30d: number;
+}
+
+export interface CommunityHealth {
+  hasContributing: boolean;
+  hasCodeOfConduct: boolean;
+  hasIssueTemplate: boolean;
 }
 
 export interface DependencyFiles {
@@ -56,6 +69,8 @@ export interface Scores {
   activityScore: number;   // 0–100
   complexityScore: number; // 0–100
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  busFactorPct: number;    // % of commits from top contributor (lower = healthier)
+  prMergeRate: number;     // % of closed PRs that were merged in last 30d (0–100)
 }
 
 export interface AnalysisResult {
@@ -69,6 +84,7 @@ export interface AnalysisResult {
   contributors: ContributorSummary;
   activity: ActivityData;
   dependencies: DependencyFiles;
+  communityHealth: CommunityHealth;
   scores: Scores;
   techStack: string[];
   analysedAt: string;
